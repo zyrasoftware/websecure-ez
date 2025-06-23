@@ -1,6 +1,6 @@
 {
   "name": "websecure-ez",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "🛡️ The ultimate web security configuration tool and library for Next.js applications. Features a powerful security middleware library, visual configuration interface, and CLI with industry-specific templates.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
