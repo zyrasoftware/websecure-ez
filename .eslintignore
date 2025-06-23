@@ -1,0 +1,12 @@
+# Binary files
+bin/
+
+# Build outputs
+dist/
+.next/
+
+# Dependencies
+node_modules/
+
+# Environment files
+.env* 

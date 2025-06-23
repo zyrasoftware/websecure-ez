@@ -1,27 +1,85 @@
 {
-  "name": "websec",
-  "version": "0.1.0",
-  "private": true,
+  "name": "websecure-ez",
+  "version": "1.0.0",
+  "description": "🛡️ The ultimate web security configuration tool and library for Next.js applications. Features a powerful security middleware library, visual configuration interface, and CLI with industry-specific templates.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "bin",
+    "scripts",
+    "example-middleware.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "security",
+    "nextjs",
+    "middleware",
+    "csp",
+    "cors",
+    "web-security",
+    "headers",
+    "csrf",
+    "xss",
+    "clickjacking",
+    "typescript",
+    "configuration-tool",
+    "security-headers",
+    "visual-config",
+    "cli-tool",
+    "industry-templates"
+  ],
+  "author": "Zyra Software",
+  "license": "MIT",
+  "homepage": "https://github.com/zyrasoftware/websecure-ez#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zyrasoftware/websecure-ez.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zyrasoftware/websecure-ez/issues"
+  },
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "echo \"\" && echo \"🛡️  Starting websecure-ez Visual Configuration Tool...\" && echo \"\" && echo \"📖 This opens the VISUAL INTERFACE at http://localhost:3000\" && echo \"💡 This is NOT your main project - it's a tool to configure security settings\" && echo \"\" && echo \"To use websecure-ez in your actual project:\" && echo \"  1. Configure settings in the interface\" && echo \"  2. Copy the generated middleware code\" && echo \"  3. Run 'npm install websecure-ez' in your project\" && echo \"  4. Paste the code into your middleware.ts file\" && echo \"\" && echo \"Or use console mode: npm run console\" && echo \"\" && echo \"Starting visual interface...\" && echo \"\" && next dev --turbopack",
+    "console": "node bin/websecure-ez.js console",
+    "visual": "npm run dev",
+    "templates": "node bin/websecure-ez.js templates",
+    "template": "node bin/websecure-ez.js template",
     "build": "next build",
+    "build:lib": "tsc --project tsconfig.lib.json",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "prepublishOnly": "npm run build:lib",
+    "postinstall": "node scripts/postinstall.js",
+    "help": "node bin/websecure-ez.js help"
   },
-  "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.3.4"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/postcss": "^4.1.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
-    "@eslint/eslintrc": "^3"
+    "jest": "^29.7.0",
+    "next": "15.3.4",
+    "postcss": "^8.5.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.10",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "next": ">=13.0.0"
+  },
+  "bin": {
+    "websecure-ez": "./bin/websecure-ez.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
