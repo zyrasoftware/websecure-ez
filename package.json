@@ -8,9 +8,18 @@
     "dist",
     "bin",
     "scripts",
+    "src",
+    "public",
     "example-middleware.ts",
+    "next.config.js",
+    "next.config.ts",
+    "tsconfig.json",
+    "tsconfig.lib.json",
+    "postcss.config.mjs",
+    "eslint.config.mjs",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CONTRIBUTING.md"
   ],
   "keywords": [
     "security",
