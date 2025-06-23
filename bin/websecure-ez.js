@@ -282,6 +282,7 @@ function showHelp() {
   console.log('  websecure-ez [command] [options]');
   console.log('');
   console.log('Commands:');
+  console.log('  init        Quick setup - create middleware.ts in your project');
   console.log('  visual      Launch visual web interface (default)');
   console.log('  console     Terminal-based configuration');
   console.log('  templates   List industry-specific templates');
@@ -322,6 +323,139 @@ function listTemplates() {
   console.log('  websecure-ez template <name>     # Generate middleware from template');
   console.log('  websecure-ez template ecommerce  # Example: E-commerce template');
   console.log('');
+}
+
+// Quick init command - create middleware.ts file
+async function runInitCommand() {
+  console.log('🚀 websecure-ez Quick Setup');
+  console.log('');
+  
+  // Check if middleware.ts already exists
+  if (fs.existsSync('middleware.ts')) {
+    console.log('⚠️  middleware.ts already exists in your project.');
+    
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+    
+    const question = (prompt) => new Promise((resolve) => {
+      rl.question(prompt, resolve);
+    });
+    
+    try {
+      const overwrite = await question('Do you want to overwrite it? (y/N): ');
+      if (overwrite.toLowerCase() !== 'y' && overwrite.toLowerCase() !== 'yes') {
+        console.log('✅ Keeping your existing middleware.ts file.');
+        console.log('');
+        console.log('💡 To configure your existing middleware:');
+        console.log('   websecure-ez console    # Terminal configuration');
+        console.log('   websecure-ez templates  # Browse templates');
+        rl.close();
+        return;
+      }
+    } catch (error) {
+      rl.close();
+      return;
+    }
+    
+    rl.close();
+  }
+  
+  // Create basic middleware template
+  const middlewareTemplate = `import { createSecureMiddleware } from 'websecure-ez';
+
+// Basic secure configuration for Next.js
+const secureMiddleware = createSecureMiddleware({
+  contentSecurityPolicy: {
+    enabled: true,
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'", "https:", "data:"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: true,
+    },
+  },
+  xFrameOptions: {
+    enabled: true,
+    option: 'DENY',
+  },
+  hsts: {
+    enabled: true,
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true,
+  },
+  xContentTypeOptions: {
+    enabled: true,
+  },
+  xssProtection: {
+    enabled: true,
+    mode: 'block',
+  },
+});
+
+export default secureMiddleware;
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+};
+
+/*
+🛡️ websecure-ez Security Middleware
+
+This middleware automatically adds security headers to your Next.js app:
+• Content Security Policy (CSP) - Prevents XSS attacks
+• X-Frame-Options - Prevents clickjacking
+• HSTS - Enforces HTTPS connections
+• X-Content-Type-Options - Prevents MIME sniffing
+• X-XSS-Protection - Browser XSS protection
+
+To customize settings:
+• Run: npx websecure-ez console
+• Or visit: npx websecure-ez visual
+• Templates: npx websecure-ez templates
+
+Documentation: https://github.com/zyrasoftware/websecure-ez
+*/`;
+
+  try {
+    fs.writeFileSync('middleware.ts', middlewareTemplate);
+    console.log('✅ Created middleware.ts in your project root!');
+    console.log('');
+    console.log('🚀 Your Next.js app is now secured! Security features include:');
+    console.log('   • Content Security Policy (XSS protection)');
+    console.log('   • Clickjacking protection');
+    console.log('   • HTTPS enforcement');
+    console.log('   • MIME sniffing prevention');
+    console.log('   • And more security headers');
+    console.log('');
+    console.log('🎯 Next steps:');
+    console.log('1. Make sure websecure-ez is installed: npm install websecure-ez');
+    console.log('2. Test your application');
+    console.log('3. Customize if needed: npx websecure-ez console');
+    console.log('');
+    console.log('💡 To customize settings later:');
+    console.log('   npx websecure-ez console    # Terminal configuration');
+    console.log('   npx websecure-ez visual     # Web interface');
+    console.log('   npx websecure-ez templates  # Industry templates');
+    
+  } catch (error) {
+    console.log('❌ Failed to create middleware.ts:', error.message);
+    console.log('');
+    console.log('You can create it manually with:');
+    console.log('```typescript');
+    console.log('import { createSecureMiddleware } from \'websecure-ez\';');
+    console.log('export default createSecureMiddleware();');
+    console.log('```');
+  }
+  
+  console.log('');
+  console.log('🛡️  Your Next.js security is in good hands!');
 }
 
 // Generate code from template
@@ -733,6 +867,11 @@ function main() {
     case '--help':
     case '-h':
       showHelp();
+      break;
+      
+    case 'init':
+    case 'setup':
+      runInitCommand();
       break;
       
     case 'console':
