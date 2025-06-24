@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { WebSecureConfig } from '@/lib/websecure-ez';
+import { WebSecureConfig } from 'websecure-ez';
 
 interface CodePreviewProps {
   config: Partial<WebSecureConfig>;

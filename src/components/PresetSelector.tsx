@@ -1,6 +1,6 @@
 'use client';
 
-import { WebSecureConfig } from '@/lib/websecure-ez';
+import { WebSecureConfig } from 'websecure-ez';
 
 interface PresetSelectorProps {
   onPresetSelect: (config: Partial<WebSecureConfig>) => void;

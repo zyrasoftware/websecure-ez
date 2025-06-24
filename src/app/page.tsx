@@ -7,7 +7,7 @@ import PresetSelector from '@/components/PresetSelector';
 import SecurityAnalyzer from '@/components/SecurityAnalyzer';
 import ConfigurationImportExport from '@/components/ConfigurationImportExport';
 import HelpCenter from '@/components/HelpCenter';
-import { WebSecureConfig } from '@/lib/websecure-ez';
+import { WebSecureConfig } from 'websecure-ez';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 

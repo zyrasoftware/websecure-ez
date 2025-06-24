@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { WebSecureConfig } from '@/lib/websecure-ez';
+import { WebSecureConfig } from 'websecure-ez';
 
 interface SecurityTestingProps {
   config: Partial<WebSecureConfig>;

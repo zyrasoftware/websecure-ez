@@ -1,6 +1,6 @@
 'use client';
 
-import { WebSecureConfig } from '@/lib/websecure-ez';
+import { WebSecureConfig } from 'websecure-ez';
 import { useState, useEffect, useCallback } from 'react';
 
 interface SecurityAnalyzerProps {
