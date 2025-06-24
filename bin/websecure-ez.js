@@ -872,7 +872,8 @@ function runVisualMode() {
           "react": "^19.0.0",
           "react-dom": "^19.0.0",
           "tailwindcss": "^4.1.10",
-          "websecure-ez": "^1.0.3"
+          "@tailwindcss/postcss": "^4.1.10",
+          "websecure-ez": "^1.0.5"
         },
         "devDependencies": {
           "@types/node": "^20",
