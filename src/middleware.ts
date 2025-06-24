@@ -1,4 +1,4 @@
-import { createSecureMiddleware } from './lib/websecure-ez';
+import { createSecureMiddleware } from 'websecure-ez';
 
 // Import the middleware from websecure-ez
 const secureMiddleware = createSecureMiddleware({
