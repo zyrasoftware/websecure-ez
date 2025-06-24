@@ -788,50 +788,169 @@ export const config = {
 
 // Visual mode implementation
 function runVisualMode() {
-  if (isInstalledPackage) {
-    console.log('🎨 websecure-ez Visual Mode');
-    console.log('');
-    console.log('You\'ve installed websecure-ez in your project for the security library.');
-    console.log('The Visual Mode runs as a separate development tool to avoid conflicts.');
-    console.log('');
-    console.log('🚀 Quick Solution - Use Console Mode instead:');
-    console.log('  websecure-ez console     # Terminal-based configuration');
-    console.log('  websecure-ez templates   # Browse industry templates');
-    console.log('');
-    console.log('🎨 Or access Visual Mode separately:');
-    console.log('  npx websecure-ez visual  # Runs in temporary environment');
-    console.log('');
-    console.log('💡 Why this separation?');
-    console.log('   • Keeps your project clean (no UI dependencies)');
-    console.log('   • Prevents conflicts with your Next.js setup');
-    console.log('   • Visual tool generates code you copy to your project');
-    console.log('');
-    console.log('✅ Your websecure-ez library is ready to use:');
-    console.log('   import { createSecureMiddleware } from \'websecure-ez\';');
-    console.log('');
-    console.log('💡 Tip: You can also run the post-install guide again:');
-    console.log('   node node_modules/websecure-ez/scripts/postinstall.js');
-    return;
-  }
-
-  // Check if we're in the source directory
-  const packageJsonPath = path.join(packageDir, 'package.json');
-  if (!fs.existsSync(packageJsonPath)) {
-    console.log('❌ Error: Could not find websecure-ez source files.');
-    console.log('Make sure you\'re in the websecure-ez development directory.');
-    process.exit(1);
-  }
-
-  console.log('🛡️  websecure-ez Visual Mode');
+  console.log('🎨 websecure-ez Visual Mode');
   console.log('');
-  console.log('🚀 Starting visual configuration interface...');
-  console.log('📖 Opening at http://localhost:3000');
-  console.log('💡 This is a configuration tool - generate code and copy to your project');
-  console.log('');
+  
+  const currentDir = process.cwd();
+  
+  // Check if visual interface files already exist
+  const visualFiles = ['src', 'public', 'next.config.js', 'tsconfig.json'];
+  const filesExist = visualFiles.some(file => fs.existsSync(path.join(currentDir, file)));
+  
+  if (filesExist) {
+    console.log('📁 Visual interface files already exist in this directory.');
+    console.log('🚀 Starting development server...');
+    console.log('📖 Opening at http://localhost:3000');
+    console.log('');
+  } else {
+    // Copy visual interface files to current directory
+    console.log('📦 Setting up visual interface in current directory...');
+    
+    // Determine source directory
+    let sourceDir = packageDir;
+    if (isInstalledPackage) {
+      sourceDir = path.dirname(__dirname);
+    }
+    
+    // Check if source files exist
+    const srcPath = path.join(sourceDir, 'src');
+    if (!fs.existsSync(srcPath)) {
+      console.log('❌ Error: Visual interface files not found in package.');
+      console.log('');
+      console.log('🚀 Quick alternatives:');
+      console.log('  npx websecure-ez console    # Terminal-based configuration');
+      console.log('  npx websecure-ez templates  # Browse industry templates');
+      console.log('');
+      console.log('🔧 Or clone the full repository:');
+      console.log('  git clone https://github.com/zyrasoftware/websecure-ez.git');
+      console.log('  cd websecure-ez && npm install && npm run dev');
+      process.exit(1);
+    }
+    
+    // Copy files to current directory
+    try {
+      const filesToCopy = [
+        'src',
+        'public', 
+        'next.config.js',
+        'next.config.ts',
+        'tsconfig.json',
+        'postcss.config.mjs',
+        'eslint.config.mjs'
+      ];
+      
+      console.log('📁 Copying visual interface files...');
+      
+      filesToCopy.forEach(file => {
+        const sourcePath = path.join(sourceDir, file);
+        const destPath = path.join(currentDir, file);
+        
+        if (fs.existsSync(sourcePath)) {
+          if (fs.statSync(sourcePath).isDirectory()) {
+            // Copy directory recursively
+            copyDir(sourcePath, destPath);
+          } else {
+            // Copy file
+            fs.copyFileSync(sourcePath, destPath);
+          }
+          console.log(`✅ Copied ${file}`);
+        }
+      });
+      
+      // Create a package.json for the visual interface
+      const visualPackageJson = {
+        "name": "websecure-ez-visual",
+        "version": "1.0.0",
+        "private": true,
+        "scripts": {
+          "dev": "next dev --turbopack",
+          "build": "next build",
+          "start": "next start"
+        },
+        "dependencies": {
+          "next": "15.3.4",
+          "react": "^19.0.0",
+          "react-dom": "^19.0.0",
+          "tailwindcss": "^4.1.10"
+        },
+        "devDependencies": {
+          "@types/node": "^20",
+          "@types/react": "^19",
+          "@types/react-dom": "^19",
+          "eslint": "^9",
+          "eslint-config-next": "15.3.4",
+          "postcss": "^8.5.6",
+          "typescript": "^5"
+        }
+      };
+      
+      fs.writeFileSync(
+        path.join(currentDir, 'package.json'), 
+        JSON.stringify(visualPackageJson, null, 2)
+      );
+      
+      console.log('✅ Created package.json');
+      console.log('');
+      console.log('📦 Installing dependencies...');
+      
+      // Install dependencies
+      const installChild = spawn('npm', ['install'], {
+        cwd: currentDir,
+        stdio: 'inherit',
+        shell: true
+      });
+      
+      installChild.on('close', (code) => {
+        if (code === 0) {
+          console.log('');
+          console.log('🚀 Starting development server...');
+          console.log('📖 Opening at http://localhost:3000');
+          console.log('💡 This is a configuration tool - generate code and copy to your project');
+          console.log('');
+          
+          startDevServer();
+        } else {
+          console.log('❌ Failed to install dependencies');
+          process.exit(1);
+        }
+      });
+      
+      return;
+      
+    } catch (error) {
+      console.log('❌ Error setting up visual interface:', error.message);
+      process.exit(1);
+    }
+  }
+  
+  // If files already exist, start dev server directly
+  startDevServer();
+}
 
-  // Start the Next.js development server
+// Helper function to copy directories recursively
+function copyDir(src, dest) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+  
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    
+    if (entry.isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+// Helper function to start the development server
+function startDevServer() {
   const child = spawn('npx', ['next', 'dev', '--turbopack'], {
-    cwd: packageDir,
+    cwd: process.cwd(),
     stdio: 'inherit',
     shell: true
   });

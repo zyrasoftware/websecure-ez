@@ -64,7 +64,9 @@
     "postinstall": "node scripts/postinstall.js",
     "help": "node bin/websecure-ez.js help"
   },
-  "dependencies": {},
+  "dependencies": {
+    "websecure-ez": "^1.0.2"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/forms": "^0.5.10",
